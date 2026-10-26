@@ -6,24 +6,16 @@
 /*   By: legomez <legomez@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 14:53:59 by legomez           #+#    #+#             */
-/*   Updated: 2026/10/26 10:40:45 by legomez          ###   ########.fr       */
+/*   Updated: 2026/10/26 11:25:42 by legomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-/* Checks valid format letter */
-int	valid_format(char format)
-{
-	if (ft_strchr(VALID_FORMAT, format))
-		return (1);
-	return (0);
-}
-
 /* Check % format and prints */
 int	ft_parser(char format, va_list arg)
 {
-	if (format == '%')
+	if (format == '%' && ft_strchr(VALID_FORMAT, format))
 		return (ft_putchar_int('%', 1));
 	if (format == 'c')
 		return (print_char(va_arg(arg, int)));
@@ -54,12 +46,12 @@ int	ft_printf(char const *format, ...)
 	va_start(args, format);
 	while (*format)
 	{
-		if (*format == '%' && valid_format(format[1]))
+		if (*format == '%' && ft_strchr(VALID_FORMAT, *format))
 		{
 			format++;
 			count += ft_parser(*format, args);
 		}
-		else if (*format == '%' && !valid_format(format[1]))
+		else if (*format == '%' && !ft_strchr(VALID_FORMAT, *format))
 			format++;
 		else if (*format == '%' && !format[1])
 			return (0);

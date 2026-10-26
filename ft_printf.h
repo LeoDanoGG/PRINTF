@@ -6,7 +6,7 @@
 /*   By: legomez <legomez@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/20 10:43:49 by legomez           #+#    #+#             */
-/*   Updated: 2026/10/26 10:49:57 by legomez          ###   ########.fr       */
+/*   Updated: 2026/10/26 11:26:31 by legomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,11 @@
 # define HEX_UP "0123456789ABCDEF"
 # define HEX_LOW "0123456789abcdef"
 
-/* Flags for *format */
-typedef struct s_flags
-{
-	int		minus;
-	int		zero;
-	int		dot;
-	int		precision;
-	int		width;
-	int		hash;
-	int		plus;
-	int		space;
-	char	specifier;
-}	t_flags;
-
 /* printf func */
 int	ft_printf(char const *format, ...);
 
 /* Hex counter */
 int	hex_count(unsigned long n);
-
-/* Validate format */
-int	valid_format(char format);
 
 /* Print funcs */
 int	ft_putchar_int(int c, int fd);
