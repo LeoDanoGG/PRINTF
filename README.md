@@ -10,7 +10,7 @@
 
 <!-- FILES_START -->
 ```c
-ft_printf.c print_hex.c print_int.c print_ptr.c print_str.c
+ft_printf.c ft_printf_utils.c
 ```
 <!-- FILES_END -->
 

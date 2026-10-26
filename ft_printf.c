@@ -6,31 +6,62 @@
 /*   By: legomez <legomez@student.42madrid.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/22 14:53:59 by legomez           #+#    #+#             */
-/*   Updated: 2026/10/26 11:25:42 by legomez          ###   ########.fr       */
+/*   Updated: 2026/10/26 18:17:21 by legomez          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-/* Check % format and prints */
-int	ft_parser(char format, va_list arg)
+/* Prints return char */
+int	ft_putchr(const char c)
 {
-	if (format == '%' && ft_strchr(VALID_FORMAT, format))
-		return (ft_putchar_int('%', 1));
-	if (format == 'c')
-		return (print_char(va_arg(arg, int)));
-	if (format == 's')
+	return (write(1, &c, 1));
+}
+
+/* Prints return string */
+int	print_str(const char *str)
+{
+	int	count;
+
+	count = 0;
+	if (!str)
+		str = "(null)";
+	while (*str)
+		count += ft_putchr(*str++);
+	return (count);
+}
+
+/* Validates format */
+int	ft_valid_format(const int c, const char *s)
+{
+	while (*s)
+	{
+		if (*s == (char) c)
+			return (1);
+		s++;
+	}
+	return (0);
+}
+
+/* Controls the format */
+static int	ft_parser(char specifier, va_list arg)
+{
+	if (specifier == '%')
+		return (ft_putchr('%'));
+	else if (specifier == 'c')
+		return (ft_putchr(va_arg(arg, int)));
+	else if (specifier == 's')
 		return (print_str(va_arg(arg, char *)));
-	if (format == 'd' || format == 'i')
-		return (print_int(va_arg(arg, int)));
-	if (format == 'p')
-		return (print_ptr(va_arg(arg, void *)));
-	if (format == 'u')
-		return (print_int(va_arg(arg, unsigned int)));
-	if (format == 'x')
-		return (print_hex(va_arg(arg, long), 0));
-	if (format == 'X')
-		return (print_hex(va_arg(arg, long), 1));
+	else if (specifier == 'd' || specifier == 'i')
+		return (print_nbr(va_arg(arg, int)));
+	else if (specifier == 'p')
+		return (print_ptr(va_arg(arg, unsigned long long), HEX_LOW, 1));
+	else if (specifier == 'u')
+		return (print_unsigned(va_arg(arg, unsigned int)));
+	else if (specifier == 'x')
+		return (print_hex(va_arg(arg, long), HEX_LOW));
+	else if (specifier == 'X')
+		return (print_hex(va_arg(arg, long), HEX_UP));
 	return (0);
 }
 
@@ -46,17 +77,17 @@ int	ft_printf(char const *format, ...)
 	va_start(args, format);
 	while (*format)
 	{
-		if (*format == '%' && ft_strchr(VALID_FORMAT, *format))
+		if (*format == '%' && ft_valid_format(*format, VALID_FORMAT))
 		{
 			format++;
 			count += ft_parser(*format, args);
 		}
-		else if (*format == '%' && !ft_strchr(VALID_FORMAT, *format))
-			format++;
+		else if (*format == '%' && !ft_valid_format(*format, VALID_FORMAT))
+			count += ft_putchr(*format);
 		else if (*format == '%' && !format[1])
 			return (0);
 		else
-			count += ft_putchar_int(*format, 1);
+			count += ft_putchr(*format);
 		format++;
 	}
 	va_end(args);

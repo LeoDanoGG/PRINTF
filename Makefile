@@ -1,40 +1,28 @@
 NAME        = libftprintf.a
 
 # SRCS_START
-SRCS        = ft_printf.c print_hex.c print_int.c print_ptr.c print_str.c
+SRCS        = ft_printf.c ft_printf_utils.c
 # SRCS_END
 
 OBJS        = $(SRCS:.c=.o)
-
-HEADER      = ft_printf.h
-
-# LIBFT and the -lft flag in the $(NAME) rule
-LIBFT_DIR   = ./libft
-LIBFT       = $(LIBFT_DIR)/libft.a
-INCLUDES    = -I. -I$(LIBFT_DIR)
+HEADER      = 
 
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror
+CFLAGS      = -Wall -Wextra -Werror -I.
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS)
-	cp $(LIBFT) $(NAME)
+$(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
-
 %.o: %.c $(HEADER)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
